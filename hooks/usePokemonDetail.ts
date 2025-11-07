@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 
 export function usePokemonDetail(name: string) {
     const [pokemonDetail, setPokemonDetail] = useState<PokemonDetail | null>(null);
+    const [description, setDescription] = useState<string>('');
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -10,10 +11,21 @@ export function usePokemonDetail(name: string) {
 
         setLoading(true);
 
-        fetch(`https://pokeapi.co/api/v2/pokemon/${name}`)
-            .then((response) => response.json())
-            .then(data => {
-                setPokemonDetail(data);
+        const pokemonPromise = fetch(`https://pokeapi.co/api/v2/pokemon/${name}`)
+            .then(response => response.json());
+
+        const speciesPromise = fetch(`https://pokeapi.co/api/v2/pokemon-species/${name}`)
+            .then(response => response.json());
+
+        Promise.all([pokemonPromise, speciesPromise])
+            .then(([pokemonData, speciesData]) => {
+                setPokemonDetail(pokemonData);
+
+                const flavorText = speciesData.flavor_text_entries.find(
+                    (entry: any) => entry.language.name === 'es'
+                );
+
+                setDescription(flavorText?.flavor_text.replace(/\f/g, ' ') || '');
                 setLoading(false);
             })
             .catch(error => {
@@ -22,5 +34,5 @@ export function usePokemonDetail(name: string) {
             });
     }, [name]);
 
-    return { pokemonDetail, loading };
+    return { pokemonDetail, description, loading };
 }

@@ -1,14 +1,49 @@
 import { Pokemon } from '@/types/pokemon';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+
+const POKEMON_PER_PAGE = 20;
 
 export function usePokemon() {
     const [pokemonList, setPokemonList] = useState<Pokemon[]>([]);
+    const [offset, setOffset] = useState(0);
+    const [loading, setLoading] = useState(true);
+    const [loadingMore, setLoadingMore] = useState(false);
+    const [hasMore, setHasMore] = useState(true);
 
-    useEffect(() => {
-        fetch('https://pokeapi.co/api/v2/pokemon?limit=151')
-            .then((response) => response.json())
-            .then((data) => setPokemonList(data.results));
+    const loadPokemon = useCallback(async (currentOffset: number) => {
+        if (currentOffset >= 1328) {
+            setHasMore(false);
+            return;
+        }
+
+        const isLoadingFirstPage = currentOffset === 0;
+        if (isLoadingFirstPage) {
+            setLoading(true);
+        } else {
+            setLoadingMore(true);
+        }
+
+        const response = await fetch(
+            `https://pokeapi.co/api/v2/pokemon?limit=${POKEMON_PER_PAGE}&offset=${currentOffset}`);
+        const data = await response.json();
+
+        setPokemonList(prevList => [...prevList, ...data.results]);
+        setOffset(currentOffset + POKEMON_PER_PAGE);
+        if (isLoadingFirstPage) {
+            setLoading(false);
+        } else {
+            setLoadingMore(false);
+        }
     }, []);
 
-    return { pokemonList };
+    useEffect(() => {
+        loadPokemon(0);
+    }, [loadPokemon]);
+
+    const loadMorePokemon = () => {
+        if (loading || loadingMore || !hasMore) return;
+        loadPokemon(offset);
+    };
+
+    return { pokemonList, loading, loadingMore, loadMorePokemon };
 }

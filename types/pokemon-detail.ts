@@ -16,5 +16,26 @@ export interface PokemonDetail {
         }
     }
     order: number;
+    abilities: {
+        ability: {
+            name: string;
+            url: string;
+        }
+        is_hidden: boolean;
+        slot: number;
+    }[];
+    stats: {
+        base_stat: number;
+        stat: {
+            name: string;
+            url: string;
+        }
+    }[];
+    moves: {
+        move: {
+            name: string;
+            url: string;
+        }
+    }[];
 }
     
