@@ -31,8 +31,15 @@ const styles = StyleSheet.create({
     },
     pokemonItem: {
         padding: 15,
-        borderBottomWidth: 1,
-        borderBottomColor: '#ccc',
+        borderRadius: 18,
+        shadowColor: '#f79f9fff',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
         width: '100%',
         flexDirection: 'row',
         alignItems: 'center',
@@ -40,6 +47,7 @@ const styles = StyleSheet.create({
     pokemonName: {
         fontSize: 18,
         textTransform: 'capitalize',
+        fontFamily: 'Montserrat-Regular',
     },
     pokemonImage: {
         width: 50,

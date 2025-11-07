@@ -3,8 +3,16 @@ import { ThemedView } from '@/components/themed-view';
 import { PokemonTypeColors } from '@/constants/PokemonTypes';
 import { usePokemonDetail } from '@/hooks/usePokemonDetail';
 import { Image } from 'expo-image';
-import { useLocalSearchParams } from 'expo-router';
+import { Stack, useLocalSearchParams } from 'expo-router';
 import { ActivityIndicator, StyleSheet } from 'react-native';
+
+export function generateStaticParams() {
+    return [
+        { name: 'bulbasaur' },
+        { name: 'charmander' },
+        { name: 'squirtle' },
+    ];
+}
 
 export default function PokemonDetailScreen() {
     const { name } = useLocalSearchParams<{ name: string }>();
@@ -30,27 +38,52 @@ export default function PokemonDetailScreen() {
     const backgroundColor = PokemonTypeColors[primaryType] || '#fff';
 
     return (
-        <ThemedView style={[styles.container, { backgroundColor }]}>
-            <Image 
-                source={{ uri: pokemonDetail.sprites.other['official-artwork'].front_default }}
-                style={styles.image}
+        <>
+            <Stack.Screen
+                options={{
+                    title: pokemonDetail.name.toUpperCase(),
+                    headerStyle: {
+                        backgroundColor,
+                    },
+                    headerTintColor: '#fff',
+                    headerTitleStyle: {
+                        fontFamily: 'Montserrat-Bold',
+                    },
+                }}
             />
-            <ThemedText type="title" style={styles.name}>{pokemonDetail.name}</ThemedText>
-            
-            <ThemedView style={styles.infoContainer}>
-                <ThemedText type="subtitle">Peso: {pokemonDetail.weight / 10} kg</ThemedText>
-                <ThemedText type="subtitle">Altura: {pokemonDetail.height / 10} m</ThemedText>
-            </ThemedView>
+        
+            <ThemedView style={styles.container}>
+                <ThemedView style={[styles.pokemonUpperCard, { shadowColor: backgroundColor }]}>
+                    <Image 
+                        source={{ uri: pokemonDetail.sprites.other['official-artwork'].front_default }}
+                        style={styles.image}
+                    />
+                </ThemedView>
 
-            <ThemedView style={styles.typesContainer}>
-                <ThemedText type="subtitle">Tipos:</ThemedText>
-                {
-                    pokemonDetail.types.map(typeInfo => (
-                        <ThemedText key={typeInfo.type.name} style={styles.type}>{typeInfo.type.name}</ThemedText>
-                    ))
-                }
+                <ThemedView style={styles.pokemonMidCard}>
+                    <ThemedView style={[styles.orderContainer, { backgroundColor }]}>
+                        <ThemedText style={styles.order}># {pokemonDetail.order}</ThemedText>
+                    </ThemedView>
+                    <ThemedView style={[styles.measuresContainer, { shadowColor: backgroundColor }]}>
+                        <ThemedText>{pokemonDetail.weight / 10} kg</ThemedText>
+                    </ThemedView>
+                    <ThemedView style={[styles.measuresContainer, { shadowColor: backgroundColor }]}>
+                        <ThemedText>{pokemonDetail.height / 10} m</ThemedText>
+                    </ThemedView>
+                </ThemedView>
+
+                <ThemedView style={styles.pokemonTypesCard}>
+                    {
+                        pokemonDetail.types.map(typeInfo => (
+                            <ThemedView key={typeInfo.type.name} style={[styles.typeBadge, { borderColor: backgroundColor }]}>
+                                <ThemedText style={styles.type}>{typeInfo.type.name}</ThemedText>
+                            </ThemedView>
+                        ))
+                    }
+                </ThemedView>
+                
             </ThemedView>
-        </ThemedView>
+        </>
     )
 }
 
@@ -59,14 +92,33 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 20,
         alignItems: 'center',
-    },
-    name: {
-        textTransform: 'capitalize',
-        marginTop: 20,
+        fontFamily: 'Montserrat-Regular',
     },
     image: {
         width: 200,
         height: 200,
+    },
+    pokemonUpperCard: {
+        borderRadius: 18,
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+        padding: 20,
+        justifyContent: 'center',
+        flexDirection: 'row',
+        gap: 20,
+        width: '100%',
+    },
+    pokemonMidCard: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 20,
+        width: '100%',
+        marginVertical: 20,
     },
     infoContainer: {
         marginTop: 20,
@@ -80,5 +132,42 @@ const styles = StyleSheet.create({
         fontSize: 16,
         textTransform: 'capitalize',
         marginHorizontal: 5,
-    }
+    },
+    orderContainer: {
+        borderRadius: 8,
+        padding: 8,
+        flex: 2,
+        alignItems: 'center',
+    },
+    order: {
+        fontSize: 16,
+        color: '#fff',
+        fontFamily: 'Montserrat-Bold',
+    },
+    measuresContainer: {
+        borderRadius: 8,
+        padding: 8,
+        flex: 1,
+        alignItems: 'center',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+    },
+    pokemonTypesCard: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 20,
+        width: '100%',
+        justifyContent: 'center',
+    },
+    typeBadge: {
+        borderRadius: 16,
+        paddingHorizontal: 12,
+        alignItems: 'center',
+        borderWidth: 1,
+    },
 });
