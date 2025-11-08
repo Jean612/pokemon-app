@@ -2,6 +2,7 @@ import { Pokeball } from "@/components/Pokeball";
 import { PokemonListItem } from "@/components/PokemonListItem";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
+import { globalStyles } from "@/constants/styles";
 import { usePokemon } from "@/hooks/usePokemon";
 import { useState } from "react";
 import {
@@ -39,19 +40,19 @@ export default function PokedexScreen() {
 
   if (loading && pokemonList.length === 0) {
     return (
-      <ThemedView style={styles.container}>
+      <ThemedView style={globalStyles.container}>
         <ActivityIndicator size="large" />
       </ThemedView>
     );
   }
 
   return (
-    <ThemedView style={styles.container}>
-      <ThemedView style={styles.headerContainer}>
-        <Pokeball size={28} color="#DC0A2D" />
-        <ThemedText type="title" style={styles.headerTitle}>
+    <ThemedView style={globalStyles.container}>
+      <ThemedView style={globalStyles.headerContainer}>
+        <ThemedText type="title" style={globalStyles.headerTitle}>
           Pokédex
         </ThemedText>
+        <Pokeball size={28} color="#DC0A2D" />
       </ThemedView>
 
       <TextInput
@@ -75,18 +76,6 @@ export default function PokedexScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 60,
-    alignItems: "center",
-  },
-  headerContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    width: "90%",
-    gap: 12,
-    marginVertical: 20,
-  },
   list: {
     width: "100%",
   },
@@ -99,11 +88,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     marginTop: 20,
     marginBottom: 10,
-  },
-  headerTitle: {
-    fontSize: 24,
-    fontWeight: "bold",
-    fontFamily: "Montserrat-Bold",
   },
   footer: {
     paddingVertical: 20,

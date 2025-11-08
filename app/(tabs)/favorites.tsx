@@ -1,16 +1,17 @@
 import { PokemonListItem } from "@/components/PokemonListItem";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
+import { globalStyles } from "@/constants/styles";
 import { useAuth } from "@/context/AuthContext";
-import { FlatList, StyleSheet } from "react-native";
+import { FlatList } from "react-native";
 
 export default function FavoritesScreen() {
   const { favorites } = useAuth();
 
   return (
-    <ThemedView style={styles.container}>
-      <ThemedView style={styles.headerContainer}>
-        <ThemedText type="title" style={styles.headerTitle}>
+    <ThemedView style={globalStyles.container}>
+      <ThemedView style={globalStyles.headerContainer}>
+        <ThemedText type="title" style={globalStyles.headerTitle}>
           Favorites
         </ThemedText>
       </ThemedView>
@@ -28,22 +29,3 @@ export default function FavoritesScreen() {
     </ThemedView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    paddingTop: 60,
-    alignItems: "center",
-  },
-  headerContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    width: "90%",
-    gap: 12,
-    marginVertical: 20,
-  },
-  headerTitle: {
-    fontSize: 24,
-    fontWeight: "bold",
-    fontFamily: "Montserrat-Bold",
-  },
-});
