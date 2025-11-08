@@ -2,6 +2,12 @@
 
 This is a Pokémon application built with [Expo](https://expo.dev), showcasing a list of Pokémon with search and infinite scroll capabilities, as well as a detail view for each Pokémon.
 
+## Live Demo
+
+You can check out the live web version of the app here:
+
+**[https://pokemon-app-t141.vercel.app/](https://pokemon-app-t141.vercel.app/)**
+
 ## Features
 
 - **Pokémon List**: Browse a list of Pokémon fetched from the [PokeAPI](https://pokeapi.co/).
