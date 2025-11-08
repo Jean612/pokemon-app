@@ -16,7 +16,7 @@ interface AuthContextType {
   session: User | null;
   loading: boolean;
   favorites: Favorite[];
-  addFavorite: (pokemonName: string) => Promise<void>;
+  addFavorite: (pokemonName: string, pokemonUrl: string) => Promise<void>;
   removeFavorite: (pokemonName: string) => Promise<void>;
   loadingFavorites: boolean;
 }
@@ -25,6 +25,7 @@ export interface Favorite {
   id: string;
   userId: string;
   pokemonName: string;
+  pokemonUrl: string;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -84,11 +85,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [session]);
 
   // 3. Función para añadir un favorito
-  const addFavorite = async (pokemonName: string) => {
+  const addFavorite = async (pokemonName: string, pokemonUrl: string) => {
     if (!session) return;
     await addDoc(collection(db, "favorites"), {
       userId: session.uid,
       pokemonName: pokemonName,
+      pokemonUrl: pokemonUrl,
     });
   };
 

@@ -1,10 +1,15 @@
-import { Pokeball } from '@/components/Pokeball';
-import { PokemonListItem } from '@/components/PokemonListItem';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { usePokemon } from '@/hooks/usePokemon';
-import { useState } from 'react';
-import { ActivityIndicator, FlatList, StyleSheet, TextInput } from 'react-native';
+import { Pokeball } from "@/components/Pokeball";
+import { PokemonListItem } from "@/components/PokemonListItem";
+import { ThemedText } from "@/components/themed-text";
+import { ThemedView } from "@/components/themed-view";
+import { usePokemon } from "@/hooks/usePokemon";
+import { useState } from "react";
+import {
+  ActivityIndicator,
+  FlatList,
+  StyleSheet,
+  TextInput,
+} from "react-native";
 
 /**
  * The Pokédex screen, which displays a list of Pokémon.
@@ -16,9 +21,9 @@ import { ActivityIndicator, FlatList, StyleSheet, TextInput } from 'react-native
  */
 export default function PokedexScreen() {
   const { pokemonList, loadMorePokemon, loading, loadingMore } = usePokemon();
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredPokemonList = pokemonList.filter(pokemon =>
+  const filteredPokemonList = pokemonList.filter((pokemon) =>
     pokemon.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -44,20 +49,22 @@ export default function PokedexScreen() {
     <ThemedView style={styles.container}>
       <ThemedView style={styles.headerContainer}>
         <Pokeball size={28} color="#DC0A2D" />
-        <ThemedText type="title" style={styles.headerTitle}>Pokédex</ThemedText>
+        <ThemedText type="title" style={styles.headerTitle}>
+          Pokédex
+        </ThemedText>
       </ThemedView>
 
-      <TextInput 
+      <TextInput
         style={styles.searchInput}
         placeholder="Buscar Pokémon..."
         value={searchQuery}
         onChangeText={setSearchQuery}
       />
 
-      <FlatList 
+      <FlatList
         data={filteredPokemonList}
         keyExtractor={(item) => item.name}
-        renderItem={({item}) => <PokemonListItem item={item} />}
+        renderItem={({ item }) => <PokemonListItem item={item} />}
         style={styles.list}
         onEndReached={loadMorePokemon}
         onEndReachedThreshold={0.5}
@@ -71,22 +78,22 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 60,
-    alignItems: 'center',
+    alignItems: "center",
   },
   headerContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: '90%',
+    flexDirection: "row",
+    alignItems: "center",
+    width: "90%",
     gap: 12,
     marginVertical: 20,
   },
   list: {
-    width: '100%',
+    width: "100%",
   },
   searchInput: {
-    width: '90%',
+    width: "90%",
     height: 40,
-    borderColor: '#f7b4bfff',
+    borderColor: "#f7b4bfff",
     borderWidth: 1,
     borderRadius: 18,
     paddingHorizontal: 20,
@@ -95,8 +102,8 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 24,
-    fontWeight: 'bold',
-    fontFamily: 'Montserrat-Bold',
+    fontWeight: "bold",
+    fontFamily: "Montserrat-Bold",
   },
   footer: {
     paddingVertical: 20,

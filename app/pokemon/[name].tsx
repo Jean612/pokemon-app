@@ -66,7 +66,7 @@ export default function PokemonDetailScreen() {
     if (isFavorite) {
       removeFavorite(pokemonDetail.name);
     } else {
-      addFavorite(pokemonDetail.name);
+      addFavorite(pokemonDetail.name, `https://pokeapi.co/api/v2/pokemon/${pokemonDetail.id}`);
     }
   };
 
@@ -82,15 +82,6 @@ export default function PokemonDetailScreen() {
           headerTitleStyle: {
             fontFamily: "Montserrat-Bold",
           },
-          headerRight: () => (
-            <Pressable onPress={toggleFavorite} style={{ padding: 5 }}>
-              <FontAwesome
-                name={isFavorite ? "star" : "star-o"}
-                size={25}
-                color="#fff"
-              />
-            </Pressable>
-          ),
         }}
       />
 
@@ -139,10 +130,24 @@ export default function PokemonDetailScreen() {
             </ThemedView>
           </ThemedView>
 
-          <ThemedText style={styles.sectionTitle}>Description</ThemedText>
-          <ThemedText style={styles.pokemonDescription}>
-            {description}
-          </ThemedText>
+          <ThemedView style={styles.pokemonSecondaryCard}>
+            <ThemedView style={styles.descriptionContainer}>
+              <ThemedText style={styles.sectionTitle}>Description</ThemedText>
+              <ThemedText style={styles.pokemonDescription}>
+                {description}
+              </ThemedText>
+            </ThemedView>
+            <Pressable
+              onPress={toggleFavorite}
+              style={styles.favoriteButton}
+            >
+              <FontAwesome
+                name={isFavorite ? "star" : "star-o"}
+                size={25}
+                color="#fff"
+              />
+            </Pressable>
+          </ThemedView>
 
           <ThemedText style={styles.sectionTitle}>Types</ThemedText>
           <ThemedView style={styles.pokemonBadgesContainer}>
@@ -297,5 +302,24 @@ const styles = StyleSheet.create({
     fontSize: 12,
     textTransform: "capitalize",
     marginHorizontal: 5,
+  },
+  favoriteButton: {
+    backgroundColor: "#fff700c4",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: "50%",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    marginHorizontal: "auto",
+    width: 50,
+    height: 50,
+  },
+  descriptionContainer: {
+    flex: 3
   },
 });
