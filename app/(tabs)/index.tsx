@@ -1,5 +1,6 @@
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
+import { useAuth } from "@/context/AuthContext";
 
 /**
  * The home screen of the application.
@@ -7,9 +8,10 @@ import { ThemedView } from "@/components/themed-view";
  * @returns {JSX.Element} The rendered home screen.
  */
 export default function HomeScreen() {
+    const { session } = useAuth();
     return (
         <ThemedView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <ThemedText>Hola, Pokémon!</ThemedText>
+            <ThemedText>Hola, {session?.email || 'Pokémon'}!</ThemedText>
         </ThemedView>
     )
 }
