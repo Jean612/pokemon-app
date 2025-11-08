@@ -7,6 +7,13 @@ import { IconSymbol } from '@/components/ui/icon-symbol';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
+/**
+ * A collapsible component that displays a title and can be toggled to show or hide its children.
+ * @param {PropsWithChildren & { title: string }} props The properties for the component.
+ * @param {React.ReactNode} props.children The content to be displayed when the component is open.
+ * @param {string} props.title The title of the collapsible section.
+ * @returns {JSX.Element} The rendered collapsible component.
+ */
 export function Collapsible({ children, title }: PropsWithChildren & { title: string }) {
   const [isOpen, setIsOpen] = useState(false);
   const theme = useColorScheme() ?? 'light';

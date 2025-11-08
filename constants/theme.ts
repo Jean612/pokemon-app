@@ -8,6 +8,9 @@ import { Platform } from 'react-native';
 const tintColorLight = '#d81e01ff';
 const tintColorDark = '#fff';
 
+/**
+ * An object that contains the color palette for the app, with separate colors for light and dark modes.
+ */
 export const Colors = {
   light: {
     text: '#11181C',
@@ -27,6 +30,9 @@ export const Colors = {
   },
 };
 
+/**
+ * An object that defines the font families to be used on different platforms (iOS, web, and default).
+ */
 export const Fonts = Platform.select({
   ios: {
     /** iOS `UIFontDescriptorSystemDesignDefault` */

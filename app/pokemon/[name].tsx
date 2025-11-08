@@ -7,6 +7,13 @@ import { Image } from 'expo-image';
 import { Stack, useLocalSearchParams } from 'expo-router';
 import { ActivityIndicator, ScrollView, StyleSheet } from 'react-native';
 
+/**
+ * Generates static parameters for the Pokémon detail pages.
+ * This function is used by Next.js or a similar framework to pre-render
+ * pages for the specified Pokémon at build time.
+ * @returns {Array<Object>} An array of objects, each with a `name` property
+ * representing a Pokémon to pre-render.
+ */
 export function generateStaticParams() {
     return [
         { name: 'bulbasaur' },
@@ -15,6 +22,15 @@ export function generateStaticParams() {
     ];
 }
 
+/**
+ * The screen for displaying the detailed information of a single Pokémon.
+ * It retrieves the Pokémon's name from the route parameters and fetches
+ * its details using the `usePokemonDetail` hook.
+ * The screen shows the Pokémon's image, order number, weight, height, description,
+ * types, abilities, base stats, and moves.
+ * A loading indicator is displayed while the data is being fetched.
+ * @returns {JSX.Element} The rendered Pokémon detail screen.
+ */
 export default function PokemonDetailScreen() {
     const { name } = useLocalSearchParams<{ name: string }>();
     const { pokemonDetail, loading, description } = usePokemonDetail(name);

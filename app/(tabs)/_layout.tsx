@@ -6,6 +6,13 @@ import { IconSymbol } from '@/components/ui/icon-symbol';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
+/**
+ * A tab layout component that sets up the main navigation tabs for the app.
+ * It includes two tabs: 'Home' and 'Pokédex'.
+ * This component also configures the appearance of the tabs, including the active tint color
+ * and custom tab bar buttons with haptic feedback.
+ * @returns {JSX.Element} The configured tab navigator.
+ */
 export default function TabLayout() {
   const colorScheme = useColorScheme();
 
