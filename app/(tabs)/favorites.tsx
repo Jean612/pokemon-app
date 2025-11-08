@@ -2,7 +2,6 @@ import { PokemonListItem } from "@/components/PokemonListItem";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { useAuth } from "@/context/AuthContext";
-import { Pokemon } from "@/types/pokemon";
 import { FlatList, StyleSheet } from "react-native";
 
 export default function FavoritesScreen() {
@@ -19,7 +18,11 @@ export default function FavoritesScreen() {
       <FlatList
         data={favorites}
         keyExtractor={(item) => item.pokemonName}
-        renderItem={({ item }) => <PokemonListItem item={{ name: item.pokemonName, url: item.pokemonUrl } as Pokemon } />}
+        renderItem={({ item }) => (
+          <PokemonListItem
+            item={{ name: item.pokemonName, url: item.pokemonUrl }}
+          />
+        )}
         style={{ width: "100%" }}
       />
     </ThemedView>
