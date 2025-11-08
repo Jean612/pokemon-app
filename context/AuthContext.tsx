@@ -1,37 +1,36 @@
 import { auth, db } from "@/lib/firebase";
+import { Favorite } from "@/types/favorite";
+import { Team } from "@/types/team";
 import { User, onAuthStateChanged } from "firebase/auth";
 import {
-    addDoc,
-    collection,
-    deleteDoc,
-    doc,
-    getDocs,
-    onSnapshot,
-    query,
-    where,
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  onSnapshot,
+  query,
+  updateDoc,
+  where,
 } from "firebase/firestore";
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { Alert } from "react-native";
 
 interface AuthContextType {
   session: User | null;
   loading: boolean;
   favorites: Favorite[];
+  team: Team | null;
   addFavorite: (pokemonName: string, pokemonUrl: string) => Promise<void>;
   removeFavorite: (pokemonName: string) => Promise<void>;
   loadingFavorites: boolean;
-}
-
-export interface Favorite {
-  id: string;
-  userId: string;
-  pokemonName: string;
-  pokemonUrl: string;
 }
 
 const AuthContext = createContext<AuthContextType>({
   session: null,
   loading: true,
   favorites: [],
+  team: null,
   addFavorite: async () => {},
   removeFavorite: async () => {},
   loadingFavorites: true,
@@ -46,6 +45,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [favorites, setFavorites] = useState<Favorite[]>([]);
   const [loadingFavorites, setLoadingFavorites] = useState(true);
+  const [team, setTeam] = useState<Team | null>(null);
+  const [loadingTeam, setLoadingTeam] = useState(true);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -55,6 +56,62 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     return () => unsubscribe();
   }, []);
+
+  useEffect(() => {
+    if (!session) {
+      setTeam(null);
+      setLoadingTeam(false);
+      return;
+    }
+
+    setLoadingTeam(true);
+    const q = query(
+      collection(db, "teams"),
+      where("userId", "==", session.uid)
+    );
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      if (snapshot.empty) {
+        setTeam(null);
+      } else {
+        const teamDoc = snapshot.docs[0];
+        setTeam({ id: teamDoc.id, ...teamDoc.data() } as Team);
+      }
+      setLoadingTeam(false);
+    });
+
+    return () => unsubscribe();
+  }, [session]);
+
+  const addToTeam = async (pokemonName: string, pokemonId: string) => {
+    if (!session) return;
+
+    if (team) {
+      if (team?.pokemons && team.pokemons.length >= 6) {
+        Alert.alert("Equipo lleno", "Tu equipo ya tiene 6 Pokémon");
+        return;
+      }
+
+      const teamRef = doc(db, "teams", team.id);
+      await updateDoc(teamRef, {
+        pokemons: [...team.pokemons, { name: pokemonName, id: pokemonId }],
+      });
+    } else {
+      await addDoc(collection(db, "teams"), {
+        userId: session.uid,
+        pokemons: [{ name: pokemonName, id: pokemonId }],
+      });
+    }
+  };
+
+  const removeFromTeam = async (pokemonId: string) => {
+    if (!session || !team) return;
+
+    const teamRef = doc(db, "teams", team.id);
+    await updateDoc(teamRef, {
+      pokemons: team.pokemons.filter((pokemon) => pokemon.id !== pokemonId),
+    });
+  };
 
   // 1. Creamos una consulta para obtener solo los favoritos del usuario actual
   useEffect(() => {
@@ -116,6 +173,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     addFavorite,
     removeFavorite,
     loadingFavorites,
+    team,
+    addToTeam,
+    removeFromTeam,
   };
 
   return (
