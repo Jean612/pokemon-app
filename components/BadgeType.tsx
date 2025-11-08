@@ -3,10 +3,19 @@ import { ThemedView } from '@/components/themed-view';
 import { PokemonTypeColors } from '@/constants/PokemonTypes';
 import { StyleSheet } from 'react-native';
 
+/**
+ * @param name The name of the Pokémon type.
+ */
 type BadgeTypeProps = {
     name: string;
 };
 
+/**
+ * A component that displays a Pokémon's type as a badge with a colored background.
+ * The color of the badge is determined by the Pokémon type.
+ * @param {BadgeTypeProps} props The properties for the component.
+ * @returns {JSX.Element} The rendered badge.
+ */
 export function BadgeType({ name }: BadgeTypeProps) {
     const colorType = PokemonTypeColors[name as keyof typeof PokemonTypeColors];
 

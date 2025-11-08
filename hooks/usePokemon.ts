@@ -3,6 +3,16 @@ import { useCallback, useEffect, useState } from 'react';
 
 const POKEMON_PER_PAGE = 20;
 
+/**
+ * A custom hook for fetching and managing a list of Pokémon from the PokeAPI.
+ * It handles pagination, loading states, and appending new Pokémon to the list.
+ * @returns {{
+ *  pokemonList: Pokemon[],
+ *  loading: boolean,
+ *  loadingMore: boolean,
+ *  loadMorePokemon: () => void
+ * }} An object containing the list of Pokémon, loading states, and a function to load more.
+ */
 export function usePokemon() {
     const [pokemonList, setPokemonList] = useState<Pokemon[]>([]);
     const [offset, setOffset] = useState(0);

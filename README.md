@@ -1,6 +1,14 @@
-# Welcome to your Expo app 👋
+# Pokémon App 👋
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+This is a Pokémon application built with [Expo](https://expo.dev), showcasing a list of Pokémon with search and infinite scroll capabilities, as well as a detail view for each Pokémon.
+
+## Features
+
+- **Pokémon List**: Browse a list of Pokémon fetched from the [PokeAPI](https://pokeapi.co/).
+- **Search**: Filter the Pokémon list by name.
+- **Infinite Scroll**: Automatically load more Pokémon as you scroll down the list.
+- **Pokémon Details**: View detailed information for each Pokémon, including its type, abilities, stats, and more.
+- **Dark Mode**: The app supports both light and dark themes.
 
 ## Get started
 
@@ -25,15 +33,13 @@ In the output, you'll find options to open the app in a
 
 You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
 
-## Get a fresh project
+## Project Structure
 
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+- **app/**: Contains the main application code, including screens and navigation.
+- **components/**: Contains reusable components used throughout the app.
+- **hooks/**: Contains custom React hooks for managing state and side effects.
+- **constants/**: Contains constant values, such as colors and themes.
+- **types/**: Contains TypeScript type definitions.
 
 ## Learn more
 

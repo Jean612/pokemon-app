@@ -11,6 +11,13 @@ export const unstable_settings = {
   anchor: '(tabs)',
 };
 
+/**
+ * The root layout for the application.
+ * This component sets up the navigation stack, loads custom fonts,
+ * and provides a theme (dark or light) to the entire app.
+ * It also includes a status bar.
+ * @returns {JSX.Element | null} The root component of the app, or null if fonts are not loaded.
+ */
 export default function RootLayout() {
   const colorScheme = useColorScheme();
 

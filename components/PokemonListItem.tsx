@@ -5,10 +5,20 @@ import { Image } from 'expo-image';
 import { Link } from 'expo-router';
 import { StyleSheet } from 'react-native';
 
+/**
+ * @param item The Pokémon data to display.
+ */
 type PokemonListItemProps = {
     item: Pokemon;
 };
 
+/**
+ * A component that displays a single Pokémon in a list.
+ * It shows the Pokémon's official artwork and its name, and links to the
+ * Pokémon's detail page.
+ * @param {PokemonListItemProps} props The properties for the component.
+ * @returns {JSX.Element} The rendered list item.
+ */
 export function PokemonListItem({ item }: PokemonListItemProps) {
 
     const pokemonId = item.url.split('/')[6];

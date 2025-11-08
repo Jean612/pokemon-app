@@ -6,6 +6,14 @@ import { usePokemon } from '@/hooks/usePokemon';
 import { useState } from 'react';
 import { ActivityIndicator, FlatList, StyleSheet, TextInput } from 'react-native';
 
+/**
+ * The Pokédex screen, which displays a list of Pokémon.
+ * It features a search bar to filter the list by name and infinite scrolling
+ * to load more Pokémon as the user scrolls down.
+ * A loading indicator is shown while the initial data is being fetched,
+ * and a smaller footer indicator is displayed when loading more Pokémon.
+ * @returns {JSX.Element} The rendered Pokédex screen.
+ */
 export default function PokedexScreen() {
   const { pokemonList, loadMorePokemon, loading, loadingMore } = usePokemon();
   const [searchQuery, setSearchQuery] = useState('');
