@@ -37,7 +37,11 @@ export function usePokemon() {
             `https://pokeapi.co/api/v2/pokemon?limit=${POKEMON_PER_PAGE}&offset=${currentOffset}`);
         const data = await response.json();
 
-        setPokemonList(prevList => [...prevList, ...data.results]);
+        setPokemonList( prevList => {
+            const existingNames = new Set(prevList.map(pokemon => pokemon.name));
+            const newUniquePokemon = data.results.filter((p: Pokemon) => !existingNames.has(p.name));
+            return [...prevList, ...newUniquePokemon];
+        });
         setOffset(currentOffset + POKEMON_PER_PAGE);
         if (isLoadingFirstPage) {
             setLoading(false);
