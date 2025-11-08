@@ -24,6 +24,10 @@ interface AuthContextType {
   addFavorite: (pokemonName: string, pokemonUrl: string) => Promise<void>;
   removeFavorite: (pokemonName: string) => Promise<void>;
   loadingFavorites: boolean;
+  addToTeam: (pokemonName: string, pokemonId: Number) => Promise<void>;
+  removeFromTeam: (pokemonId: Number) => Promise<void>;
+  loadingTeam: boolean;
+  fullTeam: boolean;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -34,6 +38,10 @@ const AuthContext = createContext<AuthContextType>({
   addFavorite: async () => {},
   removeFavorite: async () => {},
   loadingFavorites: true,
+  addToTeam: async () => {},
+  removeFromTeam: async () => {},
+  loadingTeam: true,
+  fullTeam: false,
 });
 
 export function useAuth() {
@@ -83,11 +91,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return () => unsubscribe();
   }, [session]);
 
-  const addToTeam = async (pokemonName: string, pokemonId: string) => {
+  const addToTeam = async (pokemonName: string, pokemonId: Number) => {
     if (!session) return;
 
     if (team) {
-      if (team?.pokemons && team.pokemons.length >= 6) {
+      if (team.pokemons && team.pokemons.length >= 6) {
         Alert.alert("Equipo lleno", "Tu equipo ya tiene 6 Pokémon");
         return;
       }
@@ -104,7 +112,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const removeFromTeam = async (pokemonId: string) => {
+  const removeFromTeam = async (pokemonId: Number) => {
     if (!session || !team) return;
 
     const teamRef = doc(db, "teams", team.id);
@@ -135,7 +143,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         userFavorites.push({ id: doc.id, ...doc.data() } as Favorite);
       });
       setFavorites(userFavorites);
-      setLoading(false);
+      setLoadingFavorites(false);
     });
 
     return () => unsubscribe(); // Limpiamos el listener al desmontar
@@ -166,6 +174,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     });
   };
 
+  const fullTeam = team?.pokemons.length === 6;
+
   const value = {
     session,
     loading,
@@ -176,6 +186,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     team,
     addToTeam,
     removeFromTeam,
+    loadingTeam,
+    fullTeam,
   };
 
   return (

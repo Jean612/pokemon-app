@@ -38,6 +38,10 @@ export default function PokemonDetailScreen() {
     removeFavorite,
     loading: loadingFavorites,
     session,
+    team,
+    addToTeam,
+    removeFromTeam,
+    fullTeam,
   } = useAuth();
 
   if (loadingDetail || loadingFavorites) {
@@ -55,6 +59,10 @@ export default function PokemonDetailScreen() {
       </ThemedView>
     );
   }
+
+  const pokemonInTeam = team && team.pokemons.some(
+    (pokemon) => pokemon.name === pokemonDetail?.name
+  );
 
   const isFavorite = favorites.some(
     (favorite) => favorite.pokemonName === pokemonDetail.name
@@ -76,6 +84,18 @@ export default function PokemonDetailScreen() {
         pokemonDetail.name,
         `https://pokeapi.co/api/v2/pokemon/${pokemonDetail.id}`
       );
+    }
+  };
+
+  const toggleTeam = () => {
+    if (!session) {
+      router.push("/login");
+    }
+
+    if (pokemonInTeam) {
+      removeFromTeam(pokemonDetail.id);
+    } else {
+      addToTeam(pokemonDetail.name, pokemonDetail.id);
     }
   };
 
@@ -149,6 +169,13 @@ export default function PokemonDetailScreen() {
             <Pressable onPress={toggleFavorite} style={styles.favoriteButton}>
               <FontAwesome
                 name={isFavorite ? "star" : "star-o"}
+                size={25}
+                color="#fff"
+              />
+            </Pressable>
+            <Pressable onPress={toggleTeam} disabled={fullTeam && !pokemonInTeam} style={styles.teamButton}>
+              <FontAwesome
+                name={pokemonInTeam ? "minus" : "plus"}
                 size={25}
                 color="#fff"
               />
@@ -311,6 +338,22 @@ const styles = StyleSheet.create({
   },
   favoriteButton: {
     backgroundColor: "#fff700c4",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: "50%",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    marginHorizontal: "auto",
+    width: 50,
+    height: 50,
+  },
+  teamButton: {
+    backgroundColor: "#6fff00c4",
     alignItems: "center",
     justifyContent: "center",
     borderRadius: "50%",
