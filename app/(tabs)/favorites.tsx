@@ -1,4 +1,5 @@
 import { PokemonListItem } from "@/components/PokemonListItem";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { globalStyles } from "@/constants/styles";
@@ -9,23 +10,25 @@ export default function FavoritesScreen() {
   const { favorites } = useAuth();
 
   return (
-    <ThemedView style={globalStyles.container}>
-      <ThemedView style={globalStyles.headerContainer}>
-        <ThemedText type="title" style={globalStyles.headerTitle}>
-          Favorites
-        </ThemedText>
-      </ThemedView>
+    <ProtectedRoute>
+      <ThemedView style={globalStyles.container}>
+        <ThemedView style={globalStyles.headerContainer}>
+          <ThemedText type="title" style={globalStyles.headerTitle}>
+            Favorites
+          </ThemedText>
+        </ThemedView>
 
-      <FlatList
-        data={favorites}
-        keyExtractor={(item) => item.pokemonName}
-        renderItem={({ item }) => (
-          <PokemonListItem
-            item={{ name: item.pokemonName, url: item.pokemonUrl }}
-          />
-        )}
-        style={{ width: "100%" }}
-      />
-    </ThemedView>
+        <FlatList
+          data={favorites}
+          keyExtractor={(item) => item.pokemonName}
+          renderItem={({ item }) => (
+            <PokemonListItem
+              item={{ name: item.pokemonName, url: item.pokemonUrl }}
+            />
+          )}
+          style={{ width: "100%" }}
+        />
+      </ThemedView>
+    </ProtectedRoute>
   );
 }

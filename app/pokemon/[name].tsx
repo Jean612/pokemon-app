@@ -6,12 +6,12 @@ import { useAuth } from "@/context/AuthContext";
 import { usePokemonDetail } from "@/hooks/usePokemonDetail";
 import { FontAwesome } from "@expo/vector-icons";
 import { Image } from "expo-image";
-import { Stack, useLocalSearchParams } from "expo-router";
+import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import {
-    ActivityIndicator,
-    Pressable,
-    ScrollView,
-    StyleSheet,
+  ActivityIndicator,
+  Pressable,
+  ScrollView,
+  StyleSheet,
 } from "react-native";
 
 /**
@@ -25,6 +25,7 @@ import {
  */
 export default function PokemonDetailScreen() {
   const { name } = useLocalSearchParams<{ name: string }>();
+  const router = useRouter();
   const {
     pokemonDetail,
     description,
@@ -36,6 +37,7 @@ export default function PokemonDetailScreen() {
     addFavorite,
     removeFavorite,
     loading: loadingFavorites,
+    session,
   } = useAuth();
 
   if (loadingDetail || loadingFavorites) {
@@ -63,10 +65,17 @@ export default function PokemonDetailScreen() {
   const backgroundColor = PokemonTypeColors[primaryType] || "#fff";
 
   const toggleFavorite = () => {
+    if (!session) {
+      router.push("/login");
+    }
+
     if (isFavorite) {
       removeFavorite(pokemonDetail.name);
     } else {
-      addFavorite(pokemonDetail.name, `https://pokeapi.co/api/v2/pokemon/${pokemonDetail.id}`);
+      addFavorite(
+        pokemonDetail.name,
+        `https://pokeapi.co/api/v2/pokemon/${pokemonDetail.id}`
+      );
     }
   };
 
@@ -137,10 +146,7 @@ export default function PokemonDetailScreen() {
                 {description}
               </ThemedText>
             </ThemedView>
-            <Pressable
-              onPress={toggleFavorite}
-              style={styles.favoriteButton}
-            >
+            <Pressable onPress={toggleFavorite} style={styles.favoriteButton}>
               <FontAwesome
                 name={isFavorite ? "star" : "star-o"}
                 size={25}
@@ -320,6 +326,6 @@ const styles = StyleSheet.create({
     height: 50,
   },
   descriptionContainer: {
-    flex: 3
+    flex: 3,
   },
 });

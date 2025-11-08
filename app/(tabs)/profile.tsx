@@ -1,3 +1,4 @@
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { globalStyles } from "@/constants/styles";
@@ -9,18 +10,20 @@ export default function ProfileScreen() {
   const { session } = useAuth();
 
   return (
-    <ThemedView style={globalStyles.container}>
-      <ThemedView style={globalStyles.headerContainer}>
-        <ThemedText type="title" style={globalStyles.headerTitle}>
-          Perfil
-        </ThemedText>
-      </ThemedView>
-      <ThemedText style={styles.email}>{session?.email}</ThemedText>
+    <ProtectedRoute>
+      <ThemedView style={globalStyles.container}>
+        <ThemedView style={globalStyles.headerContainer}>
+          <ThemedText type="title" style={globalStyles.headerTitle}>
+            Perfil
+          </ThemedText>
+        </ThemedView>
+        <ThemedText style={styles.email}>{session?.email}</ThemedText>
 
-      <Pressable style={styles.button} onPress={() => auth.signOut()}>
-        <ThemedText style={styles.buttonText}>Cerrar Sesión</ThemedText>
-      </Pressable>
-    </ThemedView>
+        <Pressable style={styles.button} onPress={() => auth.signOut()}>
+          <ThemedText style={styles.buttonText}>Cerrar Sesión</ThemedText>
+        </Pressable>
+      </ThemedView>
+    </ProtectedRoute>
   );
 }
 
