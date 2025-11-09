@@ -24,13 +24,18 @@ import {
  * @returns {JSX.Element} The rendered Pokémon detail screen.
  */
 export default function PokemonDetailScreen() {
-  const { name } = useLocalSearchParams<{ name: string }>();
+  const { name: pokemonId } = useLocalSearchParams<{ name: string }>();
   const router = useRouter();
   const {
     pokemonDetail,
     description,
     loading: loadingDetail,
-  } = usePokemonDetail(name);
+    habitat,
+    shape,
+    generation,
+    genera,
+    officialName,
+  } = usePokemonDetail(+pokemonId);
 
   const {
     favorites,
@@ -60,9 +65,9 @@ export default function PokemonDetailScreen() {
     );
   }
 
-  const pokemonInTeam = team && team.pokemons.some(
-    (pokemon) => pokemon.name === pokemonDetail?.name
-  );
+  const pokemonInTeam =
+    team &&
+    team.pokemons.some((pokemon) => pokemon.name === pokemonDetail?.name);
 
   const isFavorite = favorites.some(
     (favorite) => favorite.pokemonName === pokemonDetail.name
@@ -103,7 +108,11 @@ export default function PokemonDetailScreen() {
     <>
       <Stack.Screen
         options={{
-          title: pokemonDetail.name.toUpperCase(),
+          headerShown: true,
+          title:
+            officialName ||
+            pokemonDetail.name.charAt(0).toUpperCase() +
+              pokemonDetail.name.slice(1),
           headerStyle: {
             backgroundColor,
           },
@@ -111,6 +120,7 @@ export default function PokemonDetailScreen() {
           headerTitleStyle: {
             fontFamily: "Montserrat-Bold",
           },
+          headerBackButtonDisplayMode: "minimal",
         }}
       />
 
@@ -132,34 +142,6 @@ export default function PokemonDetailScreen() {
           </ThemedView>
 
           <ThemedView style={styles.pokemonSecondaryCard}>
-            <ThemedView style={[styles.orderContainer, { backgroundColor }]}>
-              <ThemedText style={styles.order}>
-                # {pokemonDetail.order}
-              </ThemedText>
-            </ThemedView>
-            <ThemedView
-              style={[
-                styles.measuresContainer,
-                { shadowColor: backgroundColor },
-              ]}
-            >
-              <ThemedText style={{ fontSize: 12 }}>
-                {pokemonDetail.weight / 10} kg
-              </ThemedText>
-            </ThemedView>
-            <ThemedView
-              style={[
-                styles.measuresContainer,
-                { shadowColor: backgroundColor },
-              ]}
-            >
-              <ThemedText style={{ fontSize: 12 }}>
-                {pokemonDetail.height / 10} m
-              </ThemedText>
-            </ThemedView>
-          </ThemedView>
-
-          <ThemedView style={styles.pokemonSecondaryCard}>
             <ThemedView style={styles.descriptionContainer}>
               <ThemedText style={styles.sectionTitle}>Description</ThemedText>
               <ThemedText style={styles.pokemonDescription}>
@@ -173,13 +155,96 @@ export default function PokemonDetailScreen() {
                 color="#fff"
               />
             </Pressable>
-            <Pressable onPress={toggleTeam} disabled={fullTeam && !pokemonInTeam} style={styles.teamButton}>
+            <Pressable
+              onPress={toggleTeam}
+              disabled={fullTeam && !pokemonInTeam}
+              style={styles.teamButton}
+            >
               <FontAwesome
                 name={pokemonInTeam ? "minus" : "plus"}
                 size={25}
                 color="#fff"
               />
             </Pressable>
+          </ThemedView>
+
+          <ThemedView style={styles.pokemonSecondaryCard}>
+            <ThemedView style={[styles.measuresContainer, { backgroundColor }]}>
+              <ThemedText style={styles.order}>
+                # {pokemonDetail.order}
+              </ThemedText>
+            </ThemedView>
+          </ThemedView>
+
+          <ThemedView style={styles.pokemonSecondaryCard}>
+            {pokemonDetail.weight && (
+              <ThemedView
+                style={[
+                  styles.measuresContainer,
+                  { shadowColor: backgroundColor },
+                ]}
+              >
+                <ThemedText style={{ fontSize: 12 }}>
+                  {pokemonDetail.weight / 10} kg
+                </ThemedText>
+              </ThemedView>
+            )}
+            <ThemedView
+              style={[
+                styles.measuresContainer,
+                { shadowColor: backgroundColor },
+              ]}
+            >
+              <ThemedText style={{ fontSize: 12 }}>
+                {pokemonDetail.height / 10} m
+              </ThemedText>
+            </ThemedView>
+
+            {generation && (
+              <ThemedView
+                style={[
+                  styles.measuresContainer,
+                  { shadowColor: backgroundColor },
+                ]}
+              >
+                <ThemedText style={{ fontSize: 12 }}>{generation}</ThemedText>
+              </ThemedView>
+            )}
+          </ThemedView>
+
+          <ThemedView style={styles.pokemonSecondaryCard}>
+            {genera && (
+              <ThemedView
+                style={[
+                  styles.measuresContainer,
+                  { shadowColor: backgroundColor },
+                ]}
+              >
+                <ThemedText style={{ fontSize: 12 }}>{genera}</ThemedText>
+              </ThemedView>
+            )}
+
+            {habitat && (
+              <ThemedView
+                style={[
+                  styles.measuresContainer,
+                  { shadowColor: backgroundColor },
+                ]}
+              >
+                <ThemedText style={{ fontSize: 12 }}>{habitat}</ThemedText>
+              </ThemedView>
+            )}
+
+            {shape && (
+              <ThemedView
+                style={[
+                  styles.measuresContainer,
+                  { shadowColor: backgroundColor },
+                ]}
+              >
+                <ThemedText style={{ fontSize: 12 }}>{shape}</ThemedText>
+              </ThemedView>
+            )}
           </ThemedView>
 
           <ThemedText style={styles.sectionTitle}>Types</ThemedText>
@@ -277,7 +342,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 20,
     width: "100%",
-    marginVertical: 20,
+    marginVertical: 8,
   },
   infoContainer: {
     marginTop: 20,

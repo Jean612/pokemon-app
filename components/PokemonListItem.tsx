@@ -23,7 +23,7 @@ export function PokemonListItem({ item }: PokemonListItemProps) {
   const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemonId}.png`;
 
   return (
-    <Link href={`/pokemon/${item.name}`} style={styles.container}>
+    <Link href={`/pokemon/${pokemonId}`} style={styles.container}>
       <ThemedView style={styles.pokemonItem}>
         <Image source={{ uri: imageUrl }} style={styles.pokemonImage} />
         <ThemedText style={styles.pokemonName}>{item.name}</ThemedText>
